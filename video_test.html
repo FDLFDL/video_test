@@ -2,11 +2,289 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Title</title>
+	<meta name="renderer" content="webkit">
+	<title>学而思在线</title>
+	<link rel="stylesheet" href="http://s.speiyou.net/web/XRSLive/client/web/css/global.css?v=201606221400">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<!--<link rel="stylesheet" href="../../client/web/css/inclass_adatp.css">-->
+	<link rel="stylesheet" href="http://s.speiyou.net/web/XRSLive/client/web/css/inclass_adatp.css?v20160616013534">
+	<style>
+		#con1 {
+			width: 100%;
+			height: 100%;
+		}
+
+		.sewiseplayer-container {
+			width: 100%;
+			height: 100%;
+			border: none;
+		}
+
+		.sewiseplayer-video {
+			width: 100%;
+			height: 100%;
+		}
+
+	</style>
+	<!--<script src="../../client/web/js/jquery-1.12.3.min.js"></script>-->
+	<!--<script src="../../client/web/js/public.js"></script>-->
+	<script src="http://s.speiyou.net/lib/core/jquery.min.js"></script>
+	<script src="http://s.speiyou.net/web/XRSLive/client/web/js/public.js?v20160616013534"></script>
 </head>
 <body>
-<video src="http://hls.speiyou.com/live_online/55b2c3c1b4f4844a06ae050d7867ee0c/playlist.m3u8" autoplay>
-	<source src="http://hls.speiyou.com/live_online/55b2c3c1b4f4844a06ae050d7867ee0c/playlist.m3u8">
-</video>
+<div class="video_container clearfix">
+	<div class="left fl">
+
+	</div>
+	<div class="center fl">
+		<div class="center_t">
+			<h2>课程标题</h2>
+			<a class="center_t_link" href="http://zhibo.speiyou.com/client/web/down_app.html?v20160616013534" target="_blank"
+			   title="下载客户端，进入教室互动">下载客户端，进入教室互动</a>
+		</div>
+		<div class="ppt" id="HLSPlayer">
+			<div id="con1" class="box"></div>
+			<div class="re-fresh">
+				<div class="re-fresh-wrap">
+					<img src="http://s.speiyou.net/web/XRSLive/img/pic_bear.png" alt="小熊">
+					<!--<img src="../../img/pic_bear.png" alt="小熊">-->
+					<h3 class="re-fresh-text">获取课堂信息失败，请刷新界面</h3>
+					<p class="re-fresh-btn"><img src="http://s.speiyou.net/web/XRSLive/img/re_fresh.png" alt="刷新"><span>点击刷新</span></p>
+				</div>
+			</div>
+		</div>
+		<div class="center_b"></div>
+		<div class="course-tip-wrap">
+			<div class="course-tip-left"></div>
+			<div class="course-tip">
+				<div class="course-tip-alert">
+					<h3 class="alert-title">上课时间</h3>
+					<h3 class="alert-text"></h3>
+				</div>
+			</div>
+			<div class="course-tip-right"></div>
+		</div>
+		<div class="video" style="display: none;">
+			<div class="video-box" id="HLSPlayer2">
+
+			</div>
+			<div class="video_content">
+				<div class="video_title">
+					<div class="close"><img src="http://s.speiyou.net/web/XRSLive/client/web/img/close_video.jpg"
+					                        alt="关闭" ondragstart="return false"></div>
+				</div>
+				<div class="video_con">
+					上课时间：<span class="time-wrap"></span>
+				</div>
+			</div>
+		</div>
+		<!--<div class="teacher_photo">-->
+		<!--<img src="http://s.speiyou.net/web/XRSLive/client/web/img/tra_icon.png" alt=""/>-->
+		<!--</div>-->
+	</div>
+	<div class="right fl">
+
+	</div>
+</div>
+<!--<script src="../../client/web/js/jquery.timers-1.2.js"></script>-->
+<script src="sewise.player.min.js"></script>
+<!--<script src="../../client/web/js/jquery.lazyload.js"></script>-->
+<!--<script src="../../client/web/js/area_code.js"></script>-->
+<!--<script src="../../client/web/js/inclass_newPlayer.js"></script>-->
+<!--<script src="../../client/web/js/area_code.js"></script>-->
+<!--<script src="../../client/web/js/inclass.js"></script>-->
+<script src="http://s.speiyou.net/web/XRSLive/client/web/js/jquery.timers-1.2.js?v20160616013534"></script>
+<!--<script src="http://s.speiyou.net/web/XRSLive/client/web/js/sewise.player.min.js?v20160616013534"></script>-->
+<script src="http://s.speiyou.net/web/XRSLive/client/web/js/jquery.lazyload.js?v20160616013534"></script>
+<script src="http://s.speiyou.net/web/XRSLive/client/web/js/area_code.js?v20160616013534"></script>
+<script src="http://s.speiyou.net/web/XRSLive/client/web/js/inclass_newPlayer.js?v=201606211651"></script>
+<script src="http://s.speiyou.net/web/XRSLive/client/web/js/area_code.js?v20160616013534"></script>
+<!--<script src="http://s.speiyou.net/web/XRSLive/client/web/js/inclass.js?v20160616013534"></script>-->
+<script>
+	var encryptId = getRequest("encryptId");
+	var arr = encryptId.split(",");
+	var videoChannelId_ppt = null;
+	var _videotype = "live";
+	var cityCode = "";
+	if (arr[1]) {
+		cityCode = arr[1];
+	} else {
+		cityCode = sessionStorage.getItem(XES_ZB_CITY_CODE);
+	}
+	var studentId = sessionStorage.getItem(XES_ZB_STUDENT_ID);//"QFpZr1IgtZv9UuQHpwJb";
+	var loginToken = sessionStorage.getItem(XES_ZB_LOG_TOKEN);
+	//$(".course-tip-wrap").hide();
+	//liveVideo('http://10.3.18.200/live_haibian/cd85c6b838364c1d87eb1d90c13f5e9e.m3u8');
+	getCurInfo(arr[0], cityCode, studentId, loginToken);
+	function getCurInfo(mid, cityCode, studentId, loginToken) {
+		mid = mid || "";
+		var tempUrl = baseUrl + '/Service/GetCurInfo';
+
+		var param = new Object();
+		param.mid = mid;
+		param.stuId = studentId == null ? "" : studentId;
+		param.city = cityCode == null ? "010" : cityCode;
+		param.platform = 1;
+		param.loginToken = loginToken;
+
+		$.ajax({
+			url: tempUrl,
+			type: "POST",
+			dataType: "json",
+			data: {
+				"data": JSON.stringify(param)
+			},//QFpZr1IgtZv9UuQHpwJb
+			error: function () {
+				console.log(data);
+			},
+			success: function (data) {
+				if (data.code == 10000) {
+//					videoChannelId_ppt = data.data.channelInfo.hls;
+					//console.log(videoChannelId_ppt);
+//						console.log(videoChannelId_ppt)
+					/*老毕测试流*/
+					//videoChannelId_ppt = "http://wshls.weclassroom.com/live_haibian/pyzb_6_11_91/playlist.m3u8";
+					/*宋老师测试流*/
+					//videoChannelId_ppt="http://wshls.weclassroom.com/live_haibian/pyzb_56_74_12/playlist.m3u8";
+					/*临时测试流*/
+					videoChannelId_ppt="http://hls.speiyou.com/live_online/55b2c3c1b4f4844a06ae050d7867ee0c/playlist.m3u8";
+					var itemCurInfo = data.data.curInfo;
+					var hours24 = 86400000;
+					var liveClassStartDate = subStrData(itemCurInfo.startTime, "data");
+					var liveClassStartTime = subStrData(itemCurInfo.startTime, "time");
+					var liveClassEndData = subStrData(itemCurInfo.endTime, "data");
+					var liveClassEndTime = subStrData(itemCurInfo.endTime, "time");
+					var liveClassTime = liveClassStartDate + " " + liveClassStartTime + " - " + liveClassEndData + " " + liveClassEndTime;
+					if (data.data.serverTime) {
+						var serverTime = new Date(formatTimeString(data.data.serverTime)).getTime();
+					}
+					var in24Hours = serverTime + hours24;
+					if (itemCurInfo.startTime) {
+						var getStartTime = new Date(formatTimeString(itemCurInfo.startTime)).getTime();
+					}
+					if (itemCurInfo.endTime) {
+
+						var getEndTime = new Date(formatTimeString(itemCurInfo.endTime)).getTime();
+
+					}
+
+
+					/*console.log('data.data.serverTime:', data.data.serverTime);
+					 console.log('itemCurInfo.startTime:', itemCurInfo.startTime);
+					 console.log('itemCurInfo.endTime:', itemCurInfo.endTime);
+					 console.log('getEndTime:', itemCurInfo.endTime);
+
+					 console.log('111111111111111111111111111111111111111111111111111111111');
+
+					 console.log('serverTime:',serverTime);
+					 console.log('getStartTime:', getStartTime);
+					 console.log('getEndTime:', getEndTime);
+					 console.log('in24Hours:', in24Hours);*/
+
+
+
+					if (serverTime > getEndTime) {
+						//status = "已结课";
+						$(".course-tip-wrap").show();
+						$(".alert-text").text(liveClassTime);
+					} else if (serverTime > getStartTime && serverTime < getEndTime) {
+						//status = '正在上课';
+						$(".course-tip-wrap").hide();
+						liveVideo(videoChannelId_ppt);
+
+					} else if (in24Hours > getStartTime) {
+						//status = "即将开课";
+						$(".course-tip-wrap").show();
+						$(".alert-text").text(liveClassTime);
+
+					} else if (in24Hours < getStartTime) {
+						// status = "待开课";
+						$(".course-tip-wrap").show();
+						$(".alert-text").text(liveClassTime);
+					}
+//						if (itemCurInfo.pictureUrl) {
+//							var tempImg = new Image();
+//							tempImg.src = itemCurInfo.pictureUrl;
+//							tempImg.onload = function () {
+//								$(".teacher_photo img")[0].src = itemCurInfo.pictureUrl;
+//							};
+//						} else {
+//							$(".teacher_photo img")[0].src = 'img/con_list.jpg';
+//						}
+
+
+					if (isMobile()) {
+						$('.teacher_photo').hide();
+						$('.center_t_link').hide();
+						$(".center_t h2").text(getRequest('teaName') + ' ' + itemCurInfo.name);
+					} else {
+						$(".center_t h2").text(itemCurInfo.name);
+					}
+
+				}
+			}
+		})
+	}
+
+	function isMobile() {
+		var userAgentInfo = navigator.userAgent;
+		var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+		// false为pc端  ,true为移动端设备
+
+		var flag = false;
+		for (var v = 0; v < Agents.length; v++) {
+			if (userAgentInfo.indexOf(Agents[v]) > 0) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
+	}
+
+
+	var is_on_off = null;
+	/*online offline*/
+	$(function on_off() {
+		var timer = null;
+		var url = window.location.href;
+		window.addEventListener('online', function () {
+			is_on_off = "on";
+			clearTimeout(timer);
+			console.log("online");
+
+			//$(".re-fresh").hide();
+
+			common_fn.reminderOK("网络已恢复！");
+		});
+		window.addEventListener('offline', function () {
+			is_on_off = "off";
+
+			$(".re-fresh").show();
+
+			common_fn.reminderERR("网络故障！请检查网络连接");
+			timer = setTimeout(function () {
+				if (is_on_off == "off") {
+					console.log("关闭播放器 待重新连接")
+				}
+			}, 5000);
+
+		});
+	});
+
+
+	$(".re-fresh-btn").on("click", function () {
+		if (is_on_off == "on") {
+			window.location.reload();
+		} else {
+			common_fn.reminderABN("请在网络畅通下重试！")
+		}
+	});
+
+	function formatTimeString(timeStr) {
+		return timeStr.replace( /-/g , "/");
+	}
+
+</script>
 </body>
 </html>
+
