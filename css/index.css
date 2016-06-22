@@ -1,0 +1,12 @@
+*{margin: 0px;padding:0px;}
+body{overflow: auto;}
+img{width: 100%;display: block;}
+img.mark{width: 640px;margin: 0px auto;}
+#con1{width: 100%;position: relative;}
+#con1 .logo{display: none;}
+#con1 #loading{width: 100%;height: 520px;background: #000;text-align: center;position: absolute;z-index:3;}
+#con1 #loading img{display: inline-block;border: none;width: 100%;height: 100%;}
+.box{height:520px;}
+.mCustomScrollBox{overflow-y: hidden;}
+.liveWhite div.sewise-player-ui div.topbar{display: none;}
+/*.liveWhite div.sewise-player-ui div.controlbar{display: none;}*/
